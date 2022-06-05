@@ -1,7 +1,10 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 
+#include"Clock.h"
+
 #include<iostream>
+
 
 int main()
 {
@@ -26,6 +29,9 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
+	
+	cng::Clock ck;
+	ck.setSpeed(5.0f);
 	float r = 0, g = 0, b = 0;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -33,9 +39,15 @@ int main()
 		{
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
-		r = cos(glfwGetTime()*0.1);
-		g = cos(glfwGetTime()*0.2);
-		b = cos(glfwGetTime()*0.3);
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			ck.setPause(ck.isPause() ^ 1);
+		}
+		float delta = ck.getCountSeconds();
+		r = cos(delta*0.1);
+		g = cos(delta*0.2);
+		b = cos(delta*0.3);
+		std::cout << "r:" << r << " g:" << g << " b:" << b << std::endl;
 		glClearColor(r , g , b , 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
