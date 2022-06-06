@@ -30,7 +30,7 @@ int main()
 		return -1;
 	}
 	
-	cng::Clock ck;
+	Clock ck;
 	ck.setSpeed(5.0f);
 	float r = 0, g = 0, b = 0;
 	while (!glfwWindowShouldClose(window))

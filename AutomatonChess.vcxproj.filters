@@ -29,5 +29,8 @@
     <ClInclude Include="engine\src\Clock.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="engine\src\Level.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
