@@ -2,9 +2,6 @@
 
 #include<xtimec.h>
 
-namespace cng
-{
-
 class Clock
 {
 private:
@@ -57,5 +54,3 @@ public:
 };
 
 const long long Clock::t_hz = _Query_perf_frequency();
-
-}
