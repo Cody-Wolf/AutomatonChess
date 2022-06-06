@@ -26,6 +26,8 @@
   <ItemGroup>
     <ClInclude Include="engine\src\Clock.h" />
     <ClInclude Include="engine\src\Level.h" />
+    <ClInclude Include="engine\src\Object.h" />
+    <ClInclude Include="engine\src\RenderManger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
