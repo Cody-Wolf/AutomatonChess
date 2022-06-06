@@ -2,6 +2,7 @@
 #include<GLFW/glfw3.h>
 
 #include"Clock.h"
+#include"Level.h"
 
 #include<iostream>
 
@@ -37,18 +38,31 @@ int main()
 	{
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
-			glfwSetWindowShouldClose(window, GLFW_TRUE);
+			if (typeid(*currentLevel) == typeid(DefaultLevel))
+				glfwSetWindowShouldClose(window, GLFW_TRUE);
+			else
+				setNextLevel<DefaultLevel>();
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			setNextLevel<aLevel>();
+		}
+		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+		{
+			setNextLevel<bLevel>();
+		}
+		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+		{
+			setNextLevel<cLevel>();
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
 			ck.setPause(ck.isPause() ^ 1);
 		}
-		float delta = ck.getCountSeconds();
-		r = cos(delta*0.1);
-		g = cos(delta*0.2);
-		b = cos(delta*0.3);
-		std::cout << "r:" << r << " g:" << g << " b:" << b << std::endl;
-		glClearColor(r , g , b , 1);
+
+		if (!swapLevel())
+			currentLevel->tick(ck.getDeltaSeconds());
+		
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glfwSwapBuffers(window);
