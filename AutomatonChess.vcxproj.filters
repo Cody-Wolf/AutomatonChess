@@ -38,5 +38,27 @@
     <ClInclude Include="engine\src\RenderManger.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="engine\render\VertexBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\render\VertexArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\render\IndexBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\render\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\render\Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\render\Image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="engine\render\shader\3dVertex.Shader" />
+    <None Include="engine\render\shader\3dFragment.shader" />
   </ItemGroup>
 </Project>

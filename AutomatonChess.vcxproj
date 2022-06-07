@@ -24,10 +24,20 @@
     <ClCompile Include="engine\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\render\Image.h" />
+    <ClInclude Include="engine\render\IndexBuffer.h" />
+    <ClInclude Include="engine\render\Shader.h" />
+    <ClInclude Include="engine\render\Texture.h" />
+    <ClInclude Include="engine\render\VertexArray.h" />
+    <ClInclude Include="engine\render\VertexBuffer.h" />
     <ClInclude Include="engine\src\Clock.h" />
     <ClInclude Include="engine\src\Level.h" />
     <ClInclude Include="engine\src\Object.h" />
     <ClInclude Include="engine\src\RenderManger.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="engine\render\shader\3dFragment.shader" />
+    <None Include="engine\render\shader\3dVertex.Shader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
