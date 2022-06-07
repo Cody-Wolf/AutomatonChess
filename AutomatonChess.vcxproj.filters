@@ -24,7 +24,7 @@
     <ClCompile Include="engine\src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="engine\game\main.cpp">
+    <ClCompile Include="engine\game\game.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

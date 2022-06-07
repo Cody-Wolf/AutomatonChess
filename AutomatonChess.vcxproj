@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="engine\game\main.cpp" />
+    <ClCompile Include="engine\game\game.cpp" />
     <ClCompile Include="engine\rely\glad.c" />
     <ClCompile Include="engine\rely\stb_image.cpp" />
     <ClCompile Include="engine\src\main.cpp" />
