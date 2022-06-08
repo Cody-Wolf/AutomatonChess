@@ -24,6 +24,9 @@
     <ClCompile Include="engine\src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="engine\src\game.h">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\src\Clock.h">

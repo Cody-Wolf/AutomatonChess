@@ -6,6 +6,7 @@
 
 
 #include<GLFW/glfw3.h>
+#include "game.h"
 
 class Level
 {
@@ -22,24 +23,21 @@ class DefaultLevel :public Level
 {
 private:
 	float sumTime;
+	WarSystem* sys;
 public:
-	void beginLevel()
-	{
-		sumTime = 0;
+	void beginLevel() {
+		sys = new WarSystem(10);
 	}
-	void tick(float delta)
-	{
-		sumTime += delta;
-		float r = cos(sumTime * 0.1);
-		float g = cos(sumTime * 0.2);
-		float b = cos(sumTime * 0.3);
-		glClearColor(r, g, b, 1.0f);
+	void tick(float delta) {
+		sys->WarLoop();
+		cout << "state now:\n";
+		for (auto x : sys->soldiers)
+			cout << x->getName() << ' ' << x->getHP() << ' '
+			<< x->getPos().x << ' ' << x->getPos().y << endl;
 	}
-	void endLevel()
-	{
-
+	void endLevel() {
+		delete sys;
 	}
-
 };
 
 
