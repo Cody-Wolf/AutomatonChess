@@ -8,6 +8,7 @@
 #define FIGHT_RANGE 10
 #define BATTLE_RANGE 100
 #define TEAM_NUMS 2
+#define ROUND_TIME 100
 
 using namespace std;
 
@@ -18,6 +19,7 @@ class BUFF {
 
 class Soldier {
 protected:
+	clock_t lastRound;
 	double maxHP, HP, maxSP, SP, roundTime;
 	double range, damage;
 	int team, cost, drugNum, level, exp;
@@ -35,23 +37,27 @@ public:
 	Soldier(int _team, int id, glm::vec2 _pos) :
 		maxHP(100), HP(100), maxSP(100), SP(100),
 		exp(0), level(1), pos(_pos), dir(), target(),
-		drugNum(2), team(_team), roundTime(1), cost(1),
+		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()),
 		damage(20), range(1), name("Soldier" + to_string(id) + " " + to_string(team)), ob(makeThreeObject()) {}
 
 	virtual void attack(Soldier* target) {
+#ifdef _DEBUG
 		cout << "attack" << endl;
-		cout << "attack before : " << target->getHP() << endl;
+#endif
 		target->getDamage(damage);
-		cout << "attack after : " << target->getHP() << endl;
 	}
 
 	void takingDurg() {
+#ifdef _DEBUG
 		cout << "takingDurg" << endl;
+#endif
 		HP = min(maxHP, HP + maxHP * 0.8), drugNum--;
 	}
 
 	void move() {
+#ifdef _DEBUG
 		cout << "move" << endl;
+#endif
 		pos += dir * SPEED;
 		pos.x = min(1.0f * BATTLE_RANGE, pos.x);
 		pos.x = max(0.0f, pos.x);
@@ -60,7 +66,9 @@ public:
 	}
 
 	virtual void rest() {
+#ifdef _DEBUG
 		cout << "rest" << endl;
+#endif
 		HP = min(maxHP, HP + maxHP * 0.05);
 		SP = min(maxSP, SP + maxSP * 0.2);
 	}
@@ -77,14 +85,24 @@ public:
 	}
 
 	virtual void makeDecision(vector<Soldier*>& soldiers) {
+#ifdef _DEBUG
 		cout << "makeDecision" << endl;
+		cout << "now time : " << clock() << endl;
+#endif
+		if (clock() - lastRound >= roundTime)
+			lastRound += roundTime;
+		else
+			return;
+
 		if(!target || !target->isAlive()) selectTarget(soldiers);
 		if (target) dir = glm::normalize(target->getPos() - pos);
-		/*if (target) cout << "dis : " << glm::distance(target->getPos(), pos) << endl;
+#ifdef _DEBUG
+		if (target) cout << "dis : " << glm::distance(target->getPos(), pos) << endl;
 		if (target)
 			cout << "target: " << target->pos.x << ' ' << target->pos.y << endl;
 		else
-			cout << "no target" << endl;*/
+			cout << "no target" << endl;
+#endif
 		if (drugNum > 0 && rand() % 100 <= 50 - 100.0 * HP / maxHP) {
 			takingDurg();
 		}
@@ -93,8 +111,7 @@ public:
 		}
 		else if (target && SP >= 30 && glm::distance(target->getPos(), pos) <= range) {
 			SP -= 30, exp += 2, attack(target);
-			if (!target->isAlive())
-				cout << "Kill" << endl, exp += 20;
+			if (!target->isAlive()) exp += 20;
 			update();
 		}
 		else if (target && SP >= 1)
@@ -104,7 +121,7 @@ public:
 
 	virtual void update() {
 		if (exp < 20) return;
-		level++, exp -= 20, roundTime *= 0.9;
+		level++, exp -= 20, roundTime *= 0.7;
 		range += 0.5, damage += 20;
 		HP *= 1.2, maxHP *= 1.2, maxSP *= 1.2;
 	}
@@ -112,6 +129,7 @@ public:
 	void getDamage(double damage) { HP -= damage; }
 	bool isAlive() { return HP > 0; }
 	glm::vec2 getPos() { return pos; }
+	glm::vec2 getDir() { return dir; }
 	string getName() { return name; }
 	double getHP() { return HP; }
 	int getLevel() { return level; }

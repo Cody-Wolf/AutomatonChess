@@ -23,7 +23,9 @@ struct Shader
 	Shader(const char* path, unsigned int type)
 	{
 		id = glCreateShader(type);
+#ifdef _DEBUG
 		std::cout << path << std::endl;
+#endif
 		std::string source = GetSource(path);
 		//std::cout << source << std::endl;
 		const char* src = source.c_str();
