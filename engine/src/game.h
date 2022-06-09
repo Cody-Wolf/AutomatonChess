@@ -39,19 +39,19 @@ public:
 		damage(20), range(1), name("Soldier" + to_string(id) + " " + to_string(team)), ob(makeThreeObject()) {}
 
 	virtual void attack(Soldier* target) {
-		cout << "attack" << endl;
-		cout << "attack before : " << target->getHP() << endl;
+		//cout << "attack" << endl;
+		//cout << "attack before : " << target->getHP() << endl;
 		target->getDamage(damage);
-		cout << "attack after : " << target->getHP() << endl;
+		//cout << "attack after : " << target->getHP() << endl;
 	}
 
 	void takingDurg() {
-		cout << "takingDurg" << endl;
+		//cout << "takingDurg" << endl;
 		HP = min(maxHP, HP + maxHP * 0.8), drugNum--;
 	}
 
 	void move() {
-		cout << "move" << endl;
+		//cout << "move" << endl;
 		pos += dir * SPEED;
 		pos.x = min(1.0f * BATTLE_RANGE, pos.x);
 		pos.x = max(0.0f, pos.x);
@@ -60,7 +60,7 @@ public:
 	}
 
 	virtual void rest() {
-		cout << "rest" << endl;
+		//cout << "rest" << endl;
 		HP = min(maxHP, HP + maxHP * 0.05);
 		SP = min(maxSP, SP + maxSP * 0.2);
 	}
@@ -77,7 +77,7 @@ public:
 	}
 
 	virtual void makeDecision(vector<Soldier*>& soldiers) {
-		cout << "makeDecision" << endl;
+		//cout << "makeDecision" << endl;
 		if(!target || !target->isAlive()) selectTarget(soldiers);
 		if (target) dir = glm::normalize(target->getPos() - pos);
 		/*if (target) cout << "dis : " << glm::distance(target->getPos(), pos) << endl;
@@ -93,8 +93,7 @@ public:
 		}
 		else if (target && SP >= 30 && glm::distance(target->getPos(), pos) <= range) {
 			SP -= 30, exp += 2, attack(target);
-			if (!target->isAlive())
-				cout << "Kill" << endl, exp += 20;
+			if (!target->isAlive()) exp += 20;
 			update();
 		}
 		else if (target && SP >= 1)
@@ -103,9 +102,9 @@ public:
 	}
 
 	virtual void update() {
-		if (exp < 20) return;
-		level++, exp -= 20, roundTime *= 0.9;
-		range += 0.5, damage += 20;
+		if (exp < 10 + 10 * level) return;
+		level++, exp -= 10 + 10 * level, roundTime *= 0.9;
+		range += 0.5, damage += 10;
 		HP *= 1.2, maxHP *= 1.2, maxSP *= 1.2;
 	}
 
