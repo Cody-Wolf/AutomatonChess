@@ -9,6 +9,7 @@
 
 int main()
 {
+	ios::sync_with_stdio(0), cout.tie(0);
 	srand(time(0));
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

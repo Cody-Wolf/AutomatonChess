@@ -25,7 +25,7 @@ struct Shader
 		id = glCreateShader(type);
 		std::cout << path << std::endl;
 		std::string source = GetSource(path);
-		std::cout << source << std::endl;
+		//std::cout << source << std::endl;
 		const char* src = source.c_str();
 		glShaderSource(id, 1, &src, NULL);
 		glCompileShader(id);

@@ -25,14 +25,21 @@ private:
 	WarSystem* sys;
 public:
 	void beginLevel() {
-		sys = new WarSystem(10);
+		sys = new WarSystem(50);
 	}
 	void tick(float delta) {
+		cout << "===========RoundStart========" << endl;
+		cout << "now nums : " << sys->soldiers.size() << endl;
 		sys->WarLoop();
 		cout << "state now:\n";
 		for (auto x : sys->soldiers)
-			cout << x->getName() << ' ' << x->getHP() << ' '
-			<< x->getPos().x << ' ' << x->getPos().y << endl;
+			cout
+			<< "-------------------\n"
+			<< "name £º " << x->getName() << endl
+			<< "HP : " << x->getHP() << endl
+			<< "Level : " << x->getLevel() << endl
+			<< "SP : " << x->getSP() << endl
+			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
 		sys->DrawLoop();
 	}
 	void endLevel() {

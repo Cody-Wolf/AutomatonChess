@@ -167,7 +167,7 @@ public:
 			glm::mat4 modeli(1.0f), view, proj;
 			modeli = glm::translate(modeli, glm::vec3(x, y, z));
 			modeli = glm::scale(modeli, model.scale);
-			view = glm::lookAt(glm::vec3(50.0f, 10.0f, 0.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			view = glm::lookAt(glm::vec3(50.0f, 10.0f, -50.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			proj = glm::perspective(glm::radians(75.0f), 1920.0f / 1080.0f, 0.1f, 1000.0f);
 			VertexArray vao;
 			VertexBuffer vbo;
