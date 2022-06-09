@@ -116,6 +116,7 @@ public:
 	double getHP() { return HP; }
 	int getLevel() { return level; }
 	int getSP() { return SP; }
+	float getRatioHP(){ return HP / maxHP; }
 };
 
 class Wizard : public Soldier {
@@ -201,7 +202,7 @@ public:
 			{
 				color = glm::vec3(0.0f, 1.0f, 0.0f);
 			}
-			s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color);
+			s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
 		}
 	}
 };
