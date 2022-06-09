@@ -10,6 +10,7 @@
 #include"../render/VertexArray.h"
 #include"../render/VertexBuffer.h"
 #include"../render/Shader.h"
+#include"../render/Texture.h"
 
 struct Model
 {
@@ -153,9 +154,36 @@ public:
 	}
 	void Render()
 	{
-		glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glm::mat4 view, proj;
+		view = glm::lookAt(glm::vec3(50.0f, 10.0f, 0.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		proj = glm::perspective(glm::radians(75.0f), 1920.0f / 1080.0f, 0.1f, 1000.0f);
+		{
+			Texture map;
+			map.Bind("engine/rely/floor.jpg");
+			Program shader("engine/render/shader/2dVertex.shader", "engine/render/shader/2dFragment.shader");
+			VertexArray vao;
+			VertexBuffer vbo;
+			VertexBufferLayout layout;
+			layout.Layout<float>(3, 0);
+			layout.Layout<float>(2, 0);
+			float postion[] = {
+				0.0f,0.0f,0.0f,0.0f,0.0f,
+				100.0f,0.0f,0.0f,1.0f,0.0f,
+				0.0f,0.0f,100.0f,0.0f,1.0f,
+				100.0f,0.0f,0.0f,1.0f,0.0f,
+				0.0f,0.0f,100.0f,0.0f,1.0f,
+				100.0f,0.0f,100.0f,1.0f,1.0f
+			};
+			vbo.SetData(sizeof(postion), postion, GL_STATIC_DRAW);
+			vao.Bind(vbo);
+			vao.Bind(layout);
+			shader.Setuniform4m("view", glm::value_ptr(view));
+			shader.Setuniform4m("proj", glm::value_ptr(proj));
+			shader.Setuniform1i("tex", 0);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 		Program shader("engine/render/shader/3dVertex.shader", "engine/render/shader/3dFragment.shader");
 		while (m_Models.size())
 		{
@@ -164,11 +192,9 @@ public:
 			float y = model.pos.z;
 			float z = model.pos.y;
 
-			glm::mat4 modeli(1.0f), view, proj;
+			glm::mat4 modeli(1.0f);
 			modeli = glm::translate(modeli, glm::vec3(x, y, z));
 			modeli = glm::scale(modeli, model.scale);
-			view = glm::lookAt(glm::vec3(50.0f, 10.0f, 0.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			proj = glm::perspective(glm::radians(75.0f), 1920.0f / 1080.0f, 0.1f, 1000.0f);
 			VertexArray vao;
 			VertexBuffer vbo;
 			VertexBufferLayout layout;
