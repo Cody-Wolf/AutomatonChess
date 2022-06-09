@@ -37,8 +37,13 @@
     <ClInclude Include="engine\src\RenderManger.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="engine\render\shader\2dFragment.shader" />
+    <None Include="engine\render\shader\2dVertex.shader" />
     <None Include="engine\render\shader\3dFragment.shader" />
     <None Include="engine\render\shader\3dVertex.Shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="engine\rely\floor.jpg" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
