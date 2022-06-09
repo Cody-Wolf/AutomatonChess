@@ -9,7 +9,7 @@
 
 int main()
 {
-
+	srand(time(0));
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -64,7 +64,7 @@ int main()
 		if (!swapLevel())
 			currentLevel->tick(ck.getDeltaSeconds());
 		
-		glClear(GL_COLOR_BUFFER_BIT);
+		GlobalRenderManger.Render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

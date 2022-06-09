@@ -2,9 +2,9 @@
 
 uniform vec3 color;
 
-out Color;
+out vec4 Color;
 
-int main()
+void main()
 {
-	Color = color;
+	Color = vec4(color,1.0f);
 }

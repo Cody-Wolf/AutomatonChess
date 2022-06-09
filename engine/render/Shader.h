@@ -8,7 +8,7 @@
 #include<fstream>
 #include<unordered_map>
 
-std::string GetSource(const char* path)
+static std::string GetSource(const char* path)
 {
 	std::ifstream file(path);
 	std::ostringstream ss;

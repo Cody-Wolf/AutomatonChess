@@ -4,7 +4,6 @@
 #include<functional>
 #include<iostream>
 
-
 #include<GLFW/glfw3.h>
 #include "game.h"
 
@@ -34,6 +33,7 @@ public:
 		for (auto x : sys->soldiers)
 			cout << x->getName() << ' ' << x->getHP() << ' '
 			<< x->getPos().x << ' ' << x->getPos().y << endl;
+		sys->DrawLoop();
 	}
 	void endLevel() {
 		delete sys;

@@ -1,8 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-#define SPEED 10.0f
-#define FIGHT_RANGE 100
+
+#include"Object.h"
+
+#define SPEED 1.0f
+#define FIGHT_RANGE 5
 using namespace std;
 
 class BUFF {
@@ -20,14 +23,17 @@ protected:
 	glm::vec2 dir;
 	glm::vec2 pos;
 	string name;
-
 public:
-
+	Object ob;
+	int getTeam()
+	{
+		return team;
+	}
 	Soldier(int _team, glm::vec2 _pos) :
 		maxHP(100), HP(100), maxSP(100), SP(100),
 		exp(0), level(1), pos(_pos), dir(), target(),
 		drugNum(2), team(_team), roundTime(1), cost(1),
-		damage(20), range(10), name("Soldier") {}
+		damage(20), range(10), name("Soldier") ,ob(makeThreeObject()){}
 
 	virtual void attack(Soldier* target) { 
 		cout << "attack" << endl; 
@@ -102,7 +108,9 @@ class Wizard : public Soldier {
 
 public:
 	Wizard(int _team, glm::vec2 _pos) :
-		Soldier(_team, _pos), maxMP(100), MP(100) { name = "Wizard"; }
+		Soldier(_team, _pos), maxMP(100), MP(100) {
+		name = "Wizard"; ob = makeFourObject();
+	}
 
 	virtual void attack(Soldier* target) { target->getDamage(damage); }
 
@@ -127,7 +135,9 @@ public:
 class Master : public Wizard {
 	double maxNP, NP;
 	Master(int _team, glm::vec2 _pos) :
-		Wizard(_team, _pos), maxNP(100), NP(100) {name = "Master";}
+		Wizard(_team, _pos), maxNP(100), NP(100) {
+		name = "Master"; ob = makeFiveObject();
+	}
 
 	virtual void attack(Soldier* target) { target->getDamage(damage); }
 
@@ -156,6 +166,22 @@ public:
 			soldiers.push_back(new Soldier(rand() % 2, glm::vec2(rand() % 100, rand() % 100)));
 	}
 	void WarLoop() {for (auto s : soldiers) s->makeDecision(soldiers);}
+	void DrawLoop() { 
+		for (auto s : soldiers)
+		{
+			int t = s->getTeam();
+			glm::vec3 color;
+			if (t == 0)
+			{
+				color = glm::vec3(1.0f, 0.0f, 0.0f);
+			}
+			else
+			{
+				color = glm::vec3(0.0f, 1.0f, 0.0f);
+			}
+			s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color);
+		}
+	}
 };
 
 
