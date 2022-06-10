@@ -154,8 +154,8 @@ public:
 	{
 		m_md.emplace_back("engine/rely/Pawn.obj");
 		m_md.emplace_back("engine/rely/Knight.obj");
-		m_md.emplace_back("engine/rely/Pawn.obj");
-		m_md.emplace_back("engine/rely/Pawn.obj");
+		m_md.emplace_back("engine/rely/King.obj");
+		m_md.emplace_back("engine/rely/Ball.obj");
 
 	}
 	void addRender(unsigned int id, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale, const glm::vec3& color)
@@ -196,6 +196,9 @@ public:
 		}
 		//static mModel mode("engine/rely/Pawn.obj");
 		Program shader("engine/render/shader/ModelVertex.shader", "engine/render/shader/ModelFragment.shader");
+		shader.Setuniform3f("cpos", 50.0f, 30.0f, -20.0f);
+		shader.Setuniform3f("ldir", -1.0f, -1.0f, 0.0f);
+
 		while (m_Models.size())
 		{
 			
