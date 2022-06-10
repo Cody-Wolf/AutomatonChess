@@ -89,13 +89,9 @@ private:
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 			auto t = processMesh(mesh, scene);
-#ifdef _DEBUG
-			std::cout << "准备push" << std::endl;
-#endif
+
 			meshes.emplace_back(std::get<0>(t), std::get<1>(t), std::get<2>(t));
-#ifdef _DEBUG
-			std::cout << "push完成" << std::endl;
-#endif
+
 		}
 		for (int i = 0; i < node->mNumChildren; ++i)
 		{
@@ -139,9 +135,7 @@ private:
 			for (int j = 0; j < face.mNumIndices; ++j)
 				indices.push_back(face.mIndices[j]);
 		}
-#ifdef _DEBUG
-		std::cout << "一个MESH加载完成" << std::endl;
-#endif //  _DEBUG
+		std::cout << indices.size() << "|||||||||||||||||||||||||||||||||\n";
 		return { vertices, indices, textures };
 	}
 	std::vector<mTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)

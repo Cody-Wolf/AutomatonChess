@@ -76,4 +76,7 @@
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="engine\rely\Pawn.obj" />
+  </ItemGroup>
 </Project>
