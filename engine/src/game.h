@@ -5,7 +5,7 @@
 #include"Object.h"
 
 #define SPEED 0.5f
-#define FIGHT_RANGE 3
+#define FIGHT_RANGE 6
 #define BATTLE_RANGE 100
 #define TEAM_NUMS 2
 #define ROUND_TIME 50
@@ -74,7 +74,7 @@ public:
 #ifdef _DEBUG
 		cout << "rest" << endl;
 #endif
-		HP = min(maxHP, HP + maxHP * 0.05);
+		HP = min(maxHP, HP + maxHP * 0.01);
 		SP = min(maxSP, SP + maxSP * 0.1);
 	}
 
@@ -128,7 +128,6 @@ public:
 		}
 		else if (target && SP >= 1)
 			move(), SP -= 1;
-		else rest();
 	}
 
 	virtual void update() {
@@ -207,7 +206,6 @@ public:
 		}
 		else if (target && SP >= 50)
 			move(), SP -= 50;
-		else rest();
 	}
 
 	virtual void rest() {

@@ -16,19 +16,19 @@ public:
 	}
 };
 
-static Object makeThreeObject(const glm::vec3& scale = glm::vec3(0.05f))
+static Object makeThreeObject(const glm::vec3& scale = glm::vec3(0.1f))
 {
 	return Object(1, scale);
 }
-static Object makeFourObject(const glm::vec3& scale = glm::vec3(3))
+static Object makeFourObject(const glm::vec3& scale = glm::vec3(0.1f))
 {
 	return Object(2, scale);
 }
-static Object makeFiveObject(const glm::vec3& scale = glm::vec3(3))
+static Object makeFiveObject(const glm::vec3& scale = glm::vec3(0.1f))
 {
 	return Object(3, scale);
 }
-static Object makeCubeObject(const glm::vec3& scale = glm::vec3(0.6))
+static Object makeCubeObject(const glm::vec3& scale = glm::vec3(0.05f))
 {
 	return Object(4, scale);
 }
