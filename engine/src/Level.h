@@ -25,7 +25,7 @@ private:
 	WarSystem* sys;
 public:
 	void beginLevel() {
-		sys = new WarSystem(100);
+		sys = new WarSystem(6);
 	}
 	void tick(float delta) {
 #ifdef _DEBUG

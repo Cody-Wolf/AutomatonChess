@@ -16,7 +16,7 @@ public:
 	}
 };
 
-static Object makeThreeObject(const glm::vec3& scale = glm::vec3(3))
+static Object makeThreeObject(const glm::vec3& scale = glm::vec3(0.05f))
 {
 	return Object(1, scale);
 }

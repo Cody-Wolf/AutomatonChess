@@ -16,7 +16,8 @@ public:
 	}
 	~VertexArray()
 	{
-		glDeleteVertexArrays(1, &id);
+		if(id)
+			glDeleteVertexArrays(1, &id);
 	}
 
 	void Bind() const

@@ -59,16 +59,24 @@
     <ClInclude Include="engine\render\Image.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="engine\src\Model.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="engine\render\shader\3dVertex.Shader" />
     <None Include="engine\render\shader\3dFragment.shader" />
     <None Include="engine\render\shader\2dVertex.shader" />
     <None Include="engine\render\shader\2dFragment.shader" />
+    <None Include="engine\render\shader\ModelVertex.shader" />
+    <None Include="engine\render\shader\ModelFragment.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="engine\rely\floor.jpg">
       <Filter>资源文件</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="engine\rely\Pawn.obj" />
   </ItemGroup>
 </Project>

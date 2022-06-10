@@ -64,10 +64,15 @@ public:
 		glGenBuffers(1, &id);
 		SetData(size, data, type);
 	}
-
+	VertexBuffer(VertexBuffer&& vb)
+	{
+		id = vb.id;
+		vb.id = 0;
+	}
 	~VertexBuffer()
 	{
-		glDeleteBuffers(1, &id);
+		if(id)
+			glDeleteBuffers(1, &id);
 	}
 
 	void Bind() const

@@ -19,9 +19,16 @@ public:
 		glGenBuffers(1, &id);
 		SetData(sz, data, type);
 	}
+	IndexBuffer(IndexBuffer&& ib)
+	{
+		id = ib.id;
+		size = ib.size;
+		ib.id = ib.size = 0;
+	}
 	~IndexBuffer()
 	{
-		glDeleteBuffers(1, &id);
+		if(id)
+			glDeleteBuffers(1, &id);
 	}
 
 	void Bind() const

@@ -36,39 +36,31 @@ int main()
 	Clock ck;
 	ck.setSpeed(5.0f);
 	float r = 0, g = 0, b = 0;
+	Clock sck;
 	while (!glfwWindowShouldClose(window))
 	{
+		std::cout << "Clost Cost:" << sck.getDeltaSeconds() << std::endl;
+		float delta = ck.getDeltaSeconds();
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
-			if (typeid(*currentLevel) == typeid(DefaultLevel))
 				glfwSetWindowShouldClose(window, GLFW_TRUE);
-			else
-				setNextLevel<DefaultLevel>();
 		}
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			setNextLevel<aLevel>();
-		}
-		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-		{
-			setNextLevel<bLevel>();
-		}
-		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
-		{
-			setNextLevel<cLevel>();
-		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			ck.setPause(ck.isPause() ^ 1);
-		}
+		std::cout << "ESC cost:" << sck.getDeltaSeconds() << std::endl;
 
 		if (!swapLevel())
-			currentLevel->tick(ck.getDeltaSeconds());
-		
-		GlobalRenderManger.Render();
+			currentLevel->tick(delta);
+		std::cout << "Game Cost:" << sck.getDeltaSeconds() << std::endl;
 
+		GlobalRenderManger.Render();
+		std::cout << "Render Cost:" << sck.getDeltaSeconds() << std::endl;
+		
 		glfwSwapBuffers(window);
+		std::cout << "Swap Cost" << sck.getDeltaSeconds() << std::endl;
+
 		glfwPollEvents();
+		std::cout << "Poll Cost" << sck.getDeltaSeconds() << std::endl;
+
+		std::cout << "Frame Cost:" <<  delta << std::endl;
 	}
 	
 	glfwTerminate();
