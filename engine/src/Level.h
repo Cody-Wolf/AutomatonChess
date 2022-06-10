@@ -25,10 +25,9 @@ private:
 	WarSystem* sys;
 public:
 	void beginLevel() {
-		sys = new WarSystem(100);
+		sys = new WarSystem(20);
 	}
 	void tick(float delta) {
-		sys->WarLoop();
 #ifdef _DEBUG
 		cout << "===========RoundStart========" << endl;
 		cout << "now nums : " << sys->soldiers.size() << endl;
@@ -42,6 +41,7 @@ public:
 			<< "SP : " << x->getSP() << endl
 			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
 #endif
+		sys->WarLoop();
 		sys->DrawLoop();
 	}
 	void endLevel() {
