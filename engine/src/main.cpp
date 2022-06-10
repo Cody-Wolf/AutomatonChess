@@ -16,7 +16,9 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", glfwGetPrimaryMonitor(), nullptr);
+	//GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", glfwGetPrimaryMonitor(), nullptr);
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", nullptr, nullptr);
+
 	if (window == nullptr)
 	{
 		std::cout << "GLFW:´°¿Ú´´½¨Ê§°Ü" << std::endl;
@@ -34,33 +36,27 @@ int main()
 	}
 	
 	Clock ck;
-	ck.setSpeed(5.0f);
-	float r = 0, g = 0, b = 0;
-	Clock sck;
+	ck.setSpeed(1.0f);
+
+	GlobalRenderManger.init();
 	while (!glfwWindowShouldClose(window))
 	{
-		std::cout << "Clost Cost:" << sck.getDeltaSeconds() << std::endl;
 		float delta = ck.getDeltaSeconds();
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
 				glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
-		std::cout << "ESC cost:" << sck.getDeltaSeconds() << std::endl;
 
 		if (!swapLevel())
 			currentLevel->tick(delta);
-		std::cout << "Game Cost:" << sck.getDeltaSeconds() << std::endl;
 
 		GlobalRenderManger.Render();
-		std::cout << "Render Cost:" << sck.getDeltaSeconds() << std::endl;
 		
 		glfwSwapBuffers(window);
-		std::cout << "Swap Cost" << sck.getDeltaSeconds() << std::endl;
 
 		glfwPollEvents();
-		std::cout << "Poll Cost" << sck.getDeltaSeconds() << std::endl;
 
-		std::cout << "Frame Cost:" <<  delta << std::endl;
+		std::cout << "FPS:" << 1.0f / delta << std::endl;
 	}
 	
 	glfwTerminate();

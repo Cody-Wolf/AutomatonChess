@@ -148,7 +148,16 @@ class RenderManger
 {
 private:
 	std::vector<Model> m_Models;
+	std::vector<mModel> m_md;
 public:
+	void init()
+	{
+		m_md.emplace_back("engine/rely/Pawn.obj");
+		m_md.emplace_back("engine/rely/Knight.obj");
+		m_md.emplace_back("engine/rely/Pawn.obj");
+		m_md.emplace_back("engine/rely/Pawn.obj");
+
+	}
 	void addRender(unsigned int id, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale, const glm::vec3& color)
 	{
 		m_Models.emplace_back(id, pos, rot, scale, color);
@@ -185,7 +194,7 @@ public:
 			shader.Setuniform1i("tex", 0);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-		static mModel mode("engine/rely/Pawn.obj");
+		//static mModel mode("engine/rely/Pawn.obj");
 		Program shader("engine/render/shader/ModelVertex.shader", "engine/render/shader/ModelFragment.shader");
 		while (m_Models.size())
 		{
@@ -209,7 +218,8 @@ public:
 			shader.Setuniform4m("model", glm::value_ptr(modeli));
 			shader.Setuniform4m("view", glm::value_ptr(view));
 			shader.Setuniform4m("proj", glm::value_ptr(proj));
-			mode.Draw(shader);
+			m_md[model.id - 1].Draw(shader);
+			//mode.Draw(shader);
 			//glDrawArrays(GL_TRIANGLES, 0, position[model.id].size());
 			
 

@@ -48,9 +48,6 @@
   <ItemGroup>
     <Image Include="engine\rely\floor.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="engine\rely\Pawn.obj" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
