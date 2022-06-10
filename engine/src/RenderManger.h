@@ -11,6 +11,7 @@
 #include"../render/VertexBuffer.h"
 #include"../render/Shader.h"
 #include"../render/Texture.h"
+#include"Model.h"
 
 struct Model
 {
@@ -184,9 +185,11 @@ public:
 			shader.Setuniform1i("tex", 0);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-		Program shader("engine/render/shader/3dVertex.shader", "engine/render/shader/3dFragment.shader");
+		static mModel mode("engine/rely/Pawn.obj");
+		Program shader("engine/render/shader/ModelVertex.shader", "engine/render/shader/ModelFragment.shader");
 		while (m_Models.size())
 		{
+			
 			auto model = m_Models.back(); m_Models.pop_back();
 			float x = model.pos.x;
 			float y = model.pos.z;
@@ -195,18 +198,19 @@ public:
 			glm::mat4 modeli(1.0f);
 			modeli = glm::translate(modeli, glm::vec3(x, y, z));
 			modeli = glm::scale(modeli, model.scale);
-			VertexArray vao;
+			/*VertexArray vao;
 			VertexBuffer vbo;
 			VertexBufferLayout layout;
 			layout.Layout<float>(3, 0);
 			vbo.SetData(position[model.id].size() * sizeof(float), position[model.id].data(), GL_STATIC_DRAW);
 			vao.Bind(vbo);
-			vao.Bind(layout);
+			vao.Bind(layout);*/
 			shader.Setuniform3f("color", model.color.r, model.color.g, model.color.b);
 			shader.Setuniform4m("model", glm::value_ptr(modeli));
 			shader.Setuniform4m("view", glm::value_ptr(view));
 			shader.Setuniform4m("proj", glm::value_ptr(proj));
-			glDrawArrays(GL_TRIANGLES, 0, position[model.id].size());
+			mode.Draw(shader);
+			//glDrawArrays(GL_TRIANGLES, 0, position[model.id].size());
 			
 
 		}
