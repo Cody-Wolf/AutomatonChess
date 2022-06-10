@@ -15,7 +15,7 @@
 
 struct Model
 {
-	Model(unsigned int id, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale, const glm::vec3& color)
+	Model(unsigned int id, const glm::vec3& pos, float rot, const glm::vec3& scale, const glm::vec3& color)
 	{
 		this->id = id;
 		this->pos = pos;
@@ -25,7 +25,7 @@ struct Model
 	}
 	unsigned int id;
 	glm::vec3 pos;
-	glm::vec3 rot;
+	float rot;
 	glm::vec3 scale;
 	glm::vec3 color;
 };
@@ -158,7 +158,7 @@ public:
 		m_md.emplace_back("engine/rely/Ball.obj");
 
 	}
-	void addRender(unsigned int id, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale, const glm::vec3& color)
+	void addRender(unsigned int id, const glm::vec3& pos, float rot, const glm::vec3& scale, const glm::vec3& color)
 	{
 		m_Models.emplace_back(id, pos, rot, scale, color);
 	}
@@ -206,10 +206,10 @@ public:
 			float x = model.pos.x;
 			float y = model.pos.z;
 			float z = model.pos.y;
-
 			glm::mat4 modeli(1.0f);
 			modeli = glm::translate(modeli, glm::vec3(x, y, z));
 			modeli = glm::scale(modeli, model.scale);
+			modeli = glm::rotate(modeli, model.rot, glm::vec3(0.0f, 1.0f, 0.0f));
 			/*VertexArray vao;
 			VertexBuffer vbo;
 			VertexBufferLayout layout;
