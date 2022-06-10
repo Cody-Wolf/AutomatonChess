@@ -5,11 +5,11 @@
 #include"Object.h"
 
 #define SPEED 0.5f
-#define FIGHT_RANGE 6
+#define FIGHT_RANGE 5
 #define BATTLE_RANGE 100
 #define TEAM_NUMS 2
 #define ROUND_TIME 50
-#define REST_CD 1000
+#define REST_CD 500
 
 using namespace std;
 
@@ -42,7 +42,7 @@ public:
 	Soldier(int _team, int id, glm::vec2 _pos) :
 		maxHP(100), HP(100), maxSP(100), SP(100),
 		exp(0), level(1), pos(_pos), dir(), target(),
-		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()),lastRest(clock()),
+		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()), lastRest(clock()),
 		damage(20), range(FIGHT_RANGE), name("Soldier" + to_string(id) + " " + to_string(team)), ob(makeThreeObject()) {}
 
 	virtual void attack(Soldier* target) {
@@ -74,8 +74,8 @@ public:
 #ifdef _DEBUG
 		cout << "rest" << endl;
 #endif
-		HP = min(maxHP, HP + maxHP * 0.01);
-		SP = min(maxSP, SP + maxSP * 0.1);
+		HP = min(maxHP, HP + maxHP * 0.2);
+		SP = min(maxSP, SP + maxSP * 0.2);
 	}
 
 
@@ -106,7 +106,7 @@ public:
 
 		if (!target || !target->isAlive()) selectTarget(soldiers);
 		if (target) {
-			if (glm::distance(target->getPos(), pos) > range * 0.5)
+			if (glm::distance(target->getPos(), pos) > range)
 				dir = glm::normalize(target->getPos() - pos);
 			else
 				dir = glm::normalize(pos - target->getPos());
@@ -123,17 +123,17 @@ public:
 		}
 		else if (target && SP >= 30 && glm::distance(target->getPos(), pos) <= range) {
 			SP -= 30, exp += 1, attack(target);
-			if (!target->isAlive()) exp += 15, drugNum++;
+			if (!target->isAlive()) exp += 15;
 			update();
 		}
-		else if (target && SP >= 1)
+		else if (target && glm::distance(target->getPos(), pos) > range && SP >= 1)
 			move(), SP -= 1;
 	}
 
 	virtual void update() {
 		if (exp < 20) return;
-		level++, exp -= 20, roundTime *= 0.75;
-		range += 0.2, damage += 20;
+		level++, exp -= 20, roundTime *= 0.8;
+		range += 1, damage += 20, drugNum++;
 		HP *= 1.2, maxHP *= 1.2, maxSP *= 1.2;
 	}
 
@@ -157,7 +157,7 @@ public:
 	}
 	void makeDecision(vector<Soldier*>& soldiers) {
 		dir = glm::normalize(target->getPos() - pos);
-		if (glm::distance(pos, target->getPos()) < 2) {
+		if (glm::distance(pos, target->getPos()) < 1) {
 			for (auto tmp : soldiers)
 				if (tmp->getTeam() && tmp->getTeam() != frd && glm::distance(tmp->getPos(), pos) < range)
 					tmp->getDamage(damage);
@@ -204,24 +204,24 @@ public:
 			soldiers.push_back(new Magic(damage, team, pos + glm::vec2(1, 1), target));
 			update();
 		}
-		else if (target && SP >= 50)
-			move(), SP -= 50;
+		else if (target && SP >= 5)
+			move(), SP -= 5;
 	}
 
 	virtual void rest() {
 #ifdef _DEBUG
 		cout << "rest" << endl;
 #endif
-		HP = min(maxHP, HP + maxHP * 0.05);
+		HP = min(maxHP, HP + maxHP * 0.4);
 		SP = min(maxSP, SP + maxSP * 0.1);
-		MP = min(maxMP, MP + maxMP * 0.03);
+		MP = min(maxMP, MP + maxMP * 0.3);
 	}
 
 
 	virtual void update() {
-		if (exp < 50) return;
-		level++, exp -= 50, roundTime *= 0.8;
-		range += 0.2, damage += 20;
+		if (exp < 40) return;
+		level++, exp -= 40, roundTime *= 0.9;
+		range += 0.2, damage += 20, drugNum++;
 		HP *= 1.2, maxHP *= 1.2, maxSP *= 1.2;
 	}
 };
@@ -253,14 +253,14 @@ public:
 	WarSystem(int _num) {
 		int WizardNums = 0.05 * _num;
 		for (int i = 0; i < WizardNums; i++)
-			soldiers.push_back(new Wizard(1, i, glm::vec2(rangeRand(0, BATTLE_RANGE / 2), rangeRand(10, BATTLE_RANGE))));
+			soldiers.push_back(new Wizard(1, i, glm::vec2(rangeRand(0, BATTLE_RANGE / 4), rangeRand(10, BATTLE_RANGE))));
 		for (int i = 0; i < WizardNums; i++)
-			soldiers.push_back(new Wizard(2, i, glm::vec2(rangeRand(BATTLE_RANGE / 2, BATTLE_RANGE), rangeRand(10, BATTLE_RANGE))));
+			soldiers.push_back(new Wizard(2, i, glm::vec2(rangeRand(BATTLE_RANGE / 4 * 3, BATTLE_RANGE), rangeRand(10, BATTLE_RANGE))));
 
 		for (int i = 0; i < _num - WizardNums; i++)
-			soldiers.push_back(new Soldier(1, i, glm::vec2(rangeRand(0, BATTLE_RANGE / 2), rangeRand(10, BATTLE_RANGE)))); 
+			soldiers.push_back(new Soldier(1, i, glm::vec2(rangeRand(0, BATTLE_RANGE / 4), rangeRand(10, BATTLE_RANGE))));
 		for (int i = 0; i < _num - WizardNums; i++)
-			soldiers.push_back(new Soldier(2, i, glm::vec2(rangeRand(BATTLE_RANGE / 2, BATTLE_RANGE), rangeRand(10, BATTLE_RANGE))));
+			soldiers.push_back(new Soldier(2, i, glm::vec2(rangeRand(BATTLE_RANGE / 4 * 3, BATTLE_RANGE), rangeRand(10, BATTLE_RANGE))));
 
 		/*soldiers.push_back(new Wizard(1, 1, glm::vec2(rand() % BATTLE_RANGE, rand() % BATTLE_RANGE)));
 		soldiers.push_back(new Wizard(2, 2, glm::vec2(rand() % BATTLE_RANGE, rand() % BATTLE_RANGE)));
@@ -296,7 +296,6 @@ public:
 				color = glm::vec3(0.0f, 1.0f, 0.0f);
 				s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
 			}
-
 		}
 	}
 };
