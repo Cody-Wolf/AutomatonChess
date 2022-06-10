@@ -5,10 +5,11 @@
 #include"Object.h"
 
 #define SPEED 0.5f
-#define FIGHT_RANGE 1
+#define FIGHT_RANGE 3
 #define BATTLE_RANGE 100
 #define TEAM_NUMS 2
 #define ROUND_TIME 50
+#define REST_CD 1000
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class BUFF {
 
 class Soldier {
 protected:
-	clock_t lastRound;
+	clock_t lastRound, lastRest;
 	double maxHP, HP, maxSP, SP, roundTime;
 	double range, damage;
 	int team, cost, drugNum, level, exp;
@@ -41,7 +42,7 @@ public:
 	Soldier(int _team, int id, glm::vec2 _pos) :
 		maxHP(100), HP(100), maxSP(100), SP(100),
 		exp(0), level(1), pos(_pos), dir(), target(),
-		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()),
+		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()),lastRest(clock()),
 		damage(20), range(FIGHT_RANGE), name("Soldier" + to_string(id) + " " + to_string(team)), ob(makeThreeObject()) {}
 
 	virtual void attack(Soldier* target) {
@@ -98,8 +99,18 @@ public:
 		else
 			return;
 
+		if (clock() - lastRest > REST_CD) {
+			lastRest = clock();
+			rest();
+		}
+
 		if (!target || !target->isAlive()) selectTarget(soldiers);
-		if (target) dir = glm::normalize(target->getPos() - pos);
+		if (target) {
+			if (glm::distance(target->getPos(), pos) > range * 0.5)
+				dir = glm::normalize(target->getPos() - pos);
+			else
+				dir = glm::normalize(pos - target->getPos());
+		}
 #ifdef _DEBUG
 		if (target) cout << "dis : " << glm::distance(target->getPos(), pos) << endl;
 		if (target)
@@ -109,9 +120,6 @@ public:
 #endif
 		if (drugNum > 0 && rand() % 100 <= 50 - 100.0 * HP / maxHP) {
 			takingDurg();
-		}
-		else if (rand() % 100 <= 30 - 100.0 * HP / maxHP || rand() % 100 <= 80 - 100.0 * SP / maxSP) {
-			rest();
 		}
 		else if (target && SP >= 30 && glm::distance(target->getPos(), pos) <= range) {
 			SP -= 30, exp += 1, attack(target);
@@ -167,7 +175,7 @@ class Wizard : public Soldier {
 public:
 	Wizard(int _team, int id, glm::vec2 _pos) :
 		Soldier(_team, id, _pos), maxMP(100), MP(100) {
-		name = "Wizard"; ob = makeFourObject(), range = 50;
+		name = "Wizard"; ob = makeFourObject(), range = FIGHT_RANGE * 8;
 		damage = 80;
 	}
 
@@ -176,6 +184,11 @@ public:
 			lastRound += roundTime;
 		else
 			return;
+
+		if (clock() - lastRest > REST_CD) {
+			lastRest = clock();
+			rest();
+		}
 
 		if (!target || !target->isAlive()) selectTarget(soldiers);
 		if (target) {
@@ -186,9 +199,6 @@ public:
 		}
 		if (drugNum > 0 && rand() % 100 <= 50 - 100.0 * HP / maxHP) {
 			takingDurg();
-		}
-		else if (rand() % 100 <= 30 - 100.0 * HP / maxHP || rand() % 100 <= 80 - 100.0 * SP / maxSP) {
-			rest();
 		}
 		else if (target && MP >= 50 && glm::distance(target->getPos(), pos) <= range) {
 			MP -= 50, exp += 5;
