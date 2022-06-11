@@ -70,6 +70,10 @@
     <None Include="engine\render\shader\2dFragment.shader" />
     <None Include="engine\render\shader\ModelVertex.shader" />
     <None Include="engine\render\shader\ModelFragment.shader" />
+    <None Include="engine\rely\Ball.stl" />
+    <None Include="engine\rely\King.stl" />
+    <None Include="engine\rely\Knight.stl" />
+    <None Include="engine\rely\Pawn.stl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="engine\rely\floor.jpg">

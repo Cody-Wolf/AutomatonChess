@@ -152,10 +152,10 @@ private:
 public:
 	void init()
 	{
-		m_md.emplace_back("engine/rely/Pawn.obj");
-		m_md.emplace_back("engine/rely/Knight.obj");
-		m_md.emplace_back("engine/rely/King.obj");
-		m_md.emplace_back("engine/rely/Ball.obj");
+		m_md.emplace_back("engine/rely/Pawn.stl");
+		m_md.emplace_back("engine/rely/Knight.stl");
+		m_md.emplace_back("engine/rely/King.stl");
+		m_md.emplace_back("engine/rely/Ball.stl");
 
 	}
 	void addRender(unsigned int id, const glm::vec3& pos, float rot, const glm::vec3& scale, const glm::vec3& color)

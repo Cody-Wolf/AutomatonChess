@@ -38,6 +38,10 @@
     <ClInclude Include="engine\src\RenderManger.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="engine\rely\Ball.stl" />
+    <None Include="engine\rely\King.stl" />
+    <None Include="engine\rely\Knight.stl" />
+    <None Include="engine\rely\Pawn.stl" />
     <None Include="engine\render\shader\2dFragment.shader" />
     <None Include="engine\render\shader\2dVertex.shader" />
     <None Include="engine\render\shader\3dFragment.shader" />
