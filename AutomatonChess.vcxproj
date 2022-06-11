@@ -46,6 +46,10 @@
     <None Include="engine\render\shader\2dVertex.shader" />
     <None Include="engine\render\shader\3dFragment.shader" />
     <None Include="engine\render\shader\3dVertex.Shader" />
+    <None Include="engine\render\shader\DepthFragment.shader" />
+    <None Include="engine\render\shader\DepthVertex.shader" />
+    <None Include="engine\render\shader\LightFragment.shader" />
+    <None Include="engine\render\shader\LightVertex.shader" />
     <None Include="engine\render\shader\ModelFragment.shader" />
     <None Include="engine\render\shader\ModelVertex.shader" />
   </ItemGroup>

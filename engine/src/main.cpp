@@ -5,6 +5,8 @@
 #include"Level.h"
 
 #include<iostream>
+#include<Windows.h>
+#include<Winbase.h>
 
 
 int main()
@@ -34,10 +36,9 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
-	
+	glEnable(GL_DEPTH_TEST);
 	Clock ck;
 	ck.setSpeed(1.0f);
-
 	GlobalRenderManger.init();
 	while (!glfwWindowShouldClose(window))
 	{
@@ -55,7 +56,6 @@ int main()
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
-
 		std::cout << "FPS:" << 1.0f / delta << std::endl;
 	}
 	
