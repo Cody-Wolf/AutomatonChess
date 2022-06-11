@@ -10,7 +10,7 @@ private:
 	glm::vec3 m_scale;
 public:
 	Object(unsigned int id, const glm::vec3& scale) :m_scale(scale), m_model(id) {  }
-	void draw(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& color)
+	void draw(const glm::vec3& pos, float rot, const glm::vec3& color)
 	{
 		GlobalRenderManger.addRender(m_model, pos, rot, m_scale, color);
 	}
@@ -28,7 +28,7 @@ static Object makeFiveObject(const glm::vec3& scale = glm::vec3(0.1f))
 {
 	return Object(3, scale);
 }
-static Object makeCubeObject(const glm::vec3& scale = glm::vec3(0.05f))
+static Object makeCubeObject(const glm::vec3& scale = glm::vec3(0.1f))
 {
 	return Object(4, scale);
 }

@@ -372,7 +372,6 @@ public:
 			glm::vec3 color;
 			if (t == 0) {
 				color = glm::vec3(245.0f / 255, 150.0f / 255, 170.0f / 255); //245 150 170
-				s->ob.draw(glm::vec3(s->getPos(), 1.5f), glm::vec3(1.0f), color * s->getRatioHP());
 			}
 			else if (t == 1)
 			{
@@ -388,6 +387,10 @@ public:
 					color = glm::vec3(85.0f / 255, 170.0f / 255, 255.0f / 255);
 				s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
 			}
+			float dx = s->getDir().x;
+			float dy = s->getDir().y;
+			float angle = atan2(dy, -dx);
+			s->ob.draw(glm::vec3(s->getPos(), 0.0f), angle, color * s->getRatioHP());
 		}
 	}
 };

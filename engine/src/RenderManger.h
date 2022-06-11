@@ -15,7 +15,7 @@
 
 struct Model
 {
-	Model(unsigned int id, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale, const glm::vec3& color)
+	Model(unsigned int id, const glm::vec3& pos, float rot, const glm::vec3& scale, const glm::vec3& color)
 	{
 		this->id = id;
 		this->pos = pos;
@@ -25,7 +25,7 @@ struct Model
 	}
 	unsigned int id;
 	glm::vec3 pos;
-	glm::vec3 rot;
+	float rot;
 	glm::vec3 scale;
 	glm::vec3 color;
 };
@@ -148,8 +148,17 @@ class RenderManger
 {
 private:
 	std::vector<Model> m_Models;
+	std::vector<mModel> m_md;
 public:
-	void addRender(unsigned int id, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale, const glm::vec3& color)
+	void init()
+	{
+		m_md.emplace_back("engine/rely/Pawn.obj");
+		m_md.emplace_back("engine/rely/Knight.obj");
+		m_md.emplace_back("engine/rely/King.obj");
+		m_md.emplace_back("engine/rely/Ball.obj");
+
+	}
+	void addRender(unsigned int id, const glm::vec3& pos, float rot, const glm::vec3& scale, const glm::vec3& color)
 	{
 		m_Models.emplace_back(id, pos, rot, scale, color);
 	}
@@ -185,8 +194,11 @@ public:
 			shader.Setuniform1i("tex", 0);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-		static mModel mode("engine/rely/Pawn.obj");
+		//static mModel mode("engine/rely/Pawn.obj");
 		Program shader("engine/render/shader/ModelVertex.shader", "engine/render/shader/ModelFragment.shader");
+		shader.Setuniform3f("cpos", 50.0f, 30.0f, -20.0f);
+		shader.Setuniform3f("ldir", -1.0f, -1.0f, 0.0f);
+
 		while (m_Models.size())
 		{
 			
@@ -194,10 +206,10 @@ public:
 			float x = model.pos.x;
 			float y = model.pos.z;
 			float z = model.pos.y;
-
 			glm::mat4 modeli(1.0f);
 			modeli = glm::translate(modeli, glm::vec3(x, y, z));
 			modeli = glm::scale(modeli, model.scale);
+			modeli = glm::rotate(modeli, model.rot, glm::vec3(0.0f, 1.0f, 0.0f));
 			/*VertexArray vao;
 			VertexBuffer vbo;
 			VertexBufferLayout layout;
@@ -209,7 +221,8 @@ public:
 			shader.Setuniform4m("model", glm::value_ptr(modeli));
 			shader.Setuniform4m("view", glm::value_ptr(view));
 			shader.Setuniform4m("proj", glm::value_ptr(proj));
-			mode.Draw(shader);
+			m_md[model.id - 1].Draw(shader);
+			//mode.Draw(shader);
 			//glDrawArrays(GL_TRIANGLES, 0, position[model.id].size());
 			
 
