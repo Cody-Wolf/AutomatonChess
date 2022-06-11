@@ -25,7 +25,7 @@ private:
 	WarSystem* sys;
 public:
 	void beginLevel() {
-		sys = new WarSystem(50);
+		sys = new WarSystem(10);
 	}
 	void tick(float delta) {
 #ifdef _DEBUG
@@ -41,6 +41,7 @@ public:
 			<< "SP : " << x->getSP() << endl
 			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
 #endif
+		sys->buffManager.loop();
 		sys->WarLoop();
 		sys->DrawLoop();
 	}

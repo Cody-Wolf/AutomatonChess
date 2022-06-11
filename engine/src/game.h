@@ -1,8 +1,10 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-
-#include"Object.h"
+#include <unordered_set>
+#include "Object.h"
 
 #define SPEED 0.5f
 #define FIGHT_RANGE 5
@@ -17,10 +19,16 @@ static int rangeRand(int l, int r) {
 	return rand() % (r - l) + l;
 }
 
-class BUFF {
-
+class BuffState {
+	clock_t endTime;
+	bool buffKind;
+	string state;
+public:
+	BuffState(clock_t _endTime, bool _buffKind, string _state) :
+		endTime(_endTime), buffKind(_buffKind), state(_state) {}
+	string getState() { return state; };
+	clock_t getEndTime() { return endTime; }
 };
-
 
 class Soldier {
 protected:
@@ -28,17 +36,14 @@ protected:
 	double maxHP, HP, maxSP, SP, roundTime;
 	double range, damage;
 	int team, cost, drugNum, level, exp;
-	vector<BUFF*> buffs;
+	unordered_set<BuffState*> buffs;
 	Soldier* target;
 	glm::vec2 dir;
 	glm::vec2 pos;
 	string name;
 public:
 	Object ob;
-	int getTeam()
-	{
-		return team;
-	}
+
 	Soldier(int _team, int id, glm::vec2 _pos) :
 		maxHP(100), HP(100), maxSP(100), SP(100),
 		exp(0), level(1), pos(_pos), dir(), target(),
@@ -70,13 +75,26 @@ public:
 		pos.y = max(0.0f, pos.y);
 	}
 
+	void updateBuffs() {
+		unordered_set<BuffState*> tmp;
+		for (auto buff : buffs)
+			if (clock() > buff->getEndTime())
+				tmp.insert(buff);
+			else {
+				cout << "BUFF: " << name << ' ' << buff->getState() << endl;
+			}
+
+		for (auto buff : tmp)
+			cout << "BUFF " << buff->getState() << " ÒÆ³ý" << endl, buffs.erase(buff);
+	}
+
 	virtual void rest() {
 #ifdef _DEBUG
 		cout << "rest" << endl;
 #endif
-		HP = min(maxHP, HP + maxHP * 0.2);
+		HP = min(maxHP, HP + maxHP * 0.1);
 		SP = min(maxSP, SP + maxSP * 0.2);
-	}
+}
 
 
 	virtual void selectTarget(vector<Soldier*>& soldiers) {
@@ -87,6 +105,11 @@ public:
 			if (tmp->getTeam() != team && tmp->getTeam() && ans > glm::distance(tmp->getPos(), pos))
 				ans = glm::distance(tmp->getPos(), pos), t = tmp;
 		target = t;
+	}
+
+	virtual void loop(vector<Soldier*>& soldiers) {
+		makeDecision(soldiers);
+		updateBuffs();
 	}
 
 	virtual void makeDecision(vector<Soldier*>& soldiers) {
@@ -128,7 +151,7 @@ public:
 		}
 		else if (target && glm::distance(target->getPos(), pos) > range && SP >= 1)
 			move(), SP -= 1;
-	}
+		}
 
 	virtual void update() {
 		if (exp < 20) return;
@@ -146,6 +169,60 @@ public:
 	int getLevel() { return level; }
 	int getSP() { return SP; }
 	float getRatioHP() { return HP / maxHP; }
+	int getTeam() { return team; }
+	void insertBuff(BuffState* buff) { buffs.insert(buff); }
+	void setRoundTime(double x) { roundTime *= x; }
+	bool hasBuff() {return buffs.size();}
+};
+
+class Buff : public BuffState {
+protected:
+	Soldier* target;
+	bool enable;
+public:
+	Buff(Soldier* _target, clock_t _endTime, bool _buffKind, string _state) :
+		BuffState(_endTime, _buffKind, _state), target(_target), enable(false) {}
+	bool isAble() { return enable; }
+	virtual void activate() = 0;
+	virtual void keep() = 0;
+	virtual void lifeEnd() = 0;
+};
+
+class BuffManager {
+	unordered_set<Buff*> buffs;
+public:
+	void insert(Buff* buff) { buffs.insert(buff); }
+	void loop() {
+		unordered_set<Buff*> tmp;
+		for (auto buff : buffs) {
+			if (!buff->isAble())
+				buff->activate();
+			if (clock() > buff->getEndTime())
+				buff->lifeEnd(), tmp.insert(buff);
+			else
+				buff->keep();
+		}
+		for (auto buff : tmp) buffs.erase(buff);
+	}
+};
+
+class LifeLine : public Buff {
+public:
+	LifeLine(Soldier* _target, clock_t _endTime) :
+		Buff(_target, _endTime, 1, "»ØÑª") {}
+
+	void activate() {}
+	void keep() { target->getDamage(-10); }
+	void lifeEnd() {}
+};
+
+class SpeedUp : public Buff {
+public:
+	SpeedUp(Soldier* _target, clock_t _endTime) :
+		Buff(_target, _endTime, 1, "¼ÓËÙ") {}
+	void activate() { target->setRoundTime(0.05); }
+	void keep() {}
+	void lifeEnd() { target->setRoundTime(20); }
 };
 
 class Magic : public Soldier {
@@ -169,6 +246,7 @@ public:
 };
 
 class Wizard : public Soldier {
+protected:
 	double maxMP, MP;
 
 public:
@@ -212,10 +290,10 @@ public:
 #ifdef _DEBUG
 		cout << "rest" << endl;
 #endif
-		HP = min(maxHP, HP + maxHP * 0.4);
+		HP = min(maxHP, HP + maxHP * 0.1);
 		SP = min(maxSP, SP + maxSP * 0.1);
 		MP = min(maxMP, MP + maxMP * 0.3);
-	}
+}
 
 
 	virtual void update() {
@@ -226,30 +304,38 @@ public:
 	}
 };
 
-
-class Master : public Wizard {
+class Master : public Soldier {
+protected:
 	double maxNP, NP;
-	Master(int _team, int id, glm::vec2 _pos) :
-		Wizard(_team, id, _pos), maxNP(100), NP(100) {
-		name = "Master"; ob = makeFiveObject();
+	BuffManager* buffmanager;
+public:
+	Master(int _team, int id, glm::vec2 _pos, BuffManager* _buffmanager) :
+		Soldier(_team, id, _pos), maxNP(100), NP(100), buffmanager(_buffmanager) {
+		name = "Master"; ob = makeFiveObject(); range = 100;
 	}
 
-	virtual void attack(Soldier* target) { target->getDamage(damage); }
-
-	virtual void selectTarget(vector<Soldier*>& soldiers) {
-
+	void selectTarget(vector<Soldier*>& soldiers) {
+		dir = glm::vec2(0, 0);
+		Soldier* t = nullptr;
+		double ans = -1;
+		for (auto tmp : soldiers)
+			if (tmp->getTeam() == team && ans < glm::distance(tmp->getPos(), pos))
+				ans = glm::distance(tmp->getPos(), pos), t = tmp;
+		target = t;
 	}
 
-
-
-	virtual void rest() {
-
+	void attack(Soldier* target) {
+		Buff* buff = new SpeedUp(target, clock() + 1000);
+		target->insertBuff(buff);
+		buffmanager->insert(buff);
 	}
+
 };
 
 class WarSystem {
 public:
 	vector<Soldier*> soldiers;
+	BuffManager buffManager;
 	WarSystem(int _num) {
 		int WizardNums = 0.05 * _num;
 		for (int i = 0; i < WizardNums; i++)
@@ -262,6 +348,8 @@ public:
 		for (int i = 0; i < _num - WizardNums; i++)
 			soldiers.push_back(new Soldier(2, i, glm::vec2(rangeRand(BATTLE_RANGE / 4 * 3, BATTLE_RANGE), rangeRand(10, BATTLE_RANGE))));
 
+		soldiers.push_back(new Master(1, 1, glm::vec2(rangeRand(0, BATTLE_RANGE / 4), rangeRand(10, BATTLE_RANGE)), &buffManager));
+		soldiers.push_back(new Master(2, 1, glm::vec2(rangeRand(BATTLE_RANGE / 4 * 3, BATTLE_RANGE), rangeRand(10, BATTLE_RANGE)), &buffManager));
 		/*soldiers.push_back(new Wizard(1, 1, glm::vec2(rand() % BATTLE_RANGE, rand() % BATTLE_RANGE)));
 		soldiers.push_back(new Wizard(2, 2, glm::vec2(rand() % BATTLE_RANGE, rand() % BATTLE_RANGE)));
 		for (int i = 0; i < 6; i++)
@@ -273,7 +361,7 @@ public:
 		vector<Soldier*> tmp;
 		for (int i = 0; i < soldiers.size(); i++) {
 			if (soldiers[i]->isAlive())
-				soldiers[i]->makeDecision(soldiers), tmp.push_back(soldiers[i]);
+				soldiers[i]->loop(soldiers), tmp.push_back(soldiers[i]);
 		}
 		soldiers = tmp;
 	}
@@ -289,16 +377,18 @@ public:
 			else if (t == 1)
 			{
 				color = glm::vec3(1.0f, 0.0f, 0.0f);
+				if(s->hasBuff())
+					color = glm::vec3(255.0f / 255, 219.0f / 255, 0.0f / 255);
 				s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
 			}
 			else
 			{
 				color = glm::vec3(0.0f, 1.0f, 0.0f);
+				if (s->hasBuff())
+					color = glm::vec3(85.0f / 255, 170.0f / 255, 255.0f / 255);
 				s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
 			}
 		}
 	}
 };
-
-
 
