@@ -376,16 +376,14 @@ public:
 			else if (t == 1)
 			{
 				color = glm::vec3(1.0f, 0.0f, 0.0f);
-				if(s->hasBuff())
-					color = glm::vec3(255.0f / 255, 219.0f / 255, 0.0f / 255);
-				s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
+				if (s->hasBuff())
+					color = glm::vec3(74.0f / 255, 220.0f / 255, 225.0f / 255);// 74,220,225
 			}
 			else
 			{
 				color = glm::vec3(0.0f, 1.0f, 0.0f);
 				if (s->hasBuff())
-					color = glm::vec3(85.0f / 255, 170.0f / 255, 255.0f / 255);
-				s->ob.draw(glm::vec3(s->getPos(), 0.0f), glm::vec3(1.0f), color * s->getRatioHP());
+					color = glm::vec3(251.0f / 255, 193.0f / 255, 25.0f / 255);// 251,193,25
 			}
 			float dx = s->getDir().x;
 			float dy = s->getDir().y;
