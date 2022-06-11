@@ -5,6 +5,8 @@
 #include"Level.h"
 
 #include<iostream>
+#include<Windows.h>
+#include<Winbase.h>
 
 
 int main()
@@ -14,6 +16,7 @@ int main()
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	//GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", glfwGetPrimaryMonitor(), nullptr);
@@ -34,10 +37,10 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
-	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 	Clock ck;
 	ck.setSpeed(1.0f);
-
 	GlobalRenderManger.init();
 	while (!glfwWindowShouldClose(window))
 	{
@@ -55,7 +58,6 @@ int main()
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
-
 		std::cout << "FPS:" << 1.0f / delta << std::endl;
 	}
 	

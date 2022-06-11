@@ -35,8 +35,8 @@ struct Shader
 		glGetShaderiv(type, GL_COMPILE_STATUS, &succes);
 		if (!succes)
 		{
-			char infolog[512];
-			glGetShaderInfoLog(type, 512, NULL, infolog);
+			char infolog[4096];
+			glGetShaderInfoLog(type, 4096, NULL, infolog);
 			std::cout << "ERROR:SHADER:" << (type == GL_VERTEX_SHADER ? "VERTEX:" : "FRAGMENT:") << infolog << std::endl;
 		}
 	}

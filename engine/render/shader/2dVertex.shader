@@ -8,8 +8,13 @@ uniform mat4 proj;
 
 out vec2 tcoord;
 
+uniform mat4 lview;
+out vec4 frag_lpos;
+
 void main()
 {
 	gl_Position = proj * view * vec4(apos, 1.0f);
 	tcoord = tpos;
+	frag_lpos = lview * vec4(apos, 1.0f);
+
 }
