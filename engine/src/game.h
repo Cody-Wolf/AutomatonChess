@@ -43,9 +43,10 @@ protected:
 	string name;
 public:
 	Object ob;
+	glm::vec3 size;
 
 	Soldier(int _team, int id, glm::vec2 _pos) :
-		maxHP(100), HP(100), maxSP(100), SP(100),
+		maxHP(100), HP(100), maxSP(100), SP(100), size(glm::vec3(1, 1, 1)),
 		exp(0), level(1), pos(_pos), dir(), target(),
 		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()), lastRest(clock()),
 		damage(20), range(FIGHT_RANGE), name("Soldier-" + to_string(id) + "-" + to_string(team)), ob(makeThreeObject()) {}
@@ -154,7 +155,7 @@ public:
 	virtual void update() {
 		if (exp < 20) return;
 		level++, exp -= 20, roundTime *= 0.8;
-		range += 1, damage += 20, drugNum++;
+		range += 0.2, damage += 20, drugNum++;
 		HP *= 1.2, maxHP *= 1.2, maxSP *= 1.2;
 	}
 
@@ -209,12 +210,12 @@ public:
 
 class LifeLine : public Buff {
 public:
-	LifeLine(Soldier* _target, clock_t _endTime) :
+	LifeLine(Soldier* _target, clock_t _endTime) :	
 		Buff(_target, _endTime, 1, "»ØÑª") {}
 
-	void activate() {}
+	void activate() { target->size *= 2, enable = 1; }
 	void keep() { target->getDamage(-5), nextKeep += 1000; }
-	void lifeEnd() {}
+	void lifeEnd() { target->size /= 2; }
 };
 
 class SpeedUp : public Buff {
@@ -223,7 +224,7 @@ public:
 		Buff(_target, _endTime, 1, "¼ÓËÙ") {
 		nextKeep = _endTime + 1;
 	}
-	void activate() { target->setRoundTime(0.5); }
+	void activate() { target->setRoundTime(0.5), enable = 1; }
 	void keep() {}
 	void lifeEnd() { target->setRoundTime(2); }
 };
@@ -329,9 +330,9 @@ public:
 	}
 
 	void attack(Soldier* target) {
-		Buff* buff = new SpeedUp(target, clock() + 2000);
-		//if (rand() % 2) buff = new SpeedUp(target, clock() + 2000);
-		//else buff = new LifeLine(target, clock() + 1000);
+		Buff* buff = nullptr; //new SpeedUp(target, clock() + 2000);
+		if (rand() % 2) buff = new SpeedUp(target, clock() + 2000);
+		else buff = new LifeLine(target, clock() + 1000);
 		target->insertBuff(buff);
 		buffmanager->insert(buff);
 	}
@@ -431,7 +432,7 @@ public:
 			float dx = s->getDir().x;
 			float dy = s->getDir().y;
 			float angle = atan2(dy, -dx);
-			s->ob.draw(glm::vec3(s->getPos(), 0.0f), angle, color * s->getRatioHP());
+			s->ob.draw(glm::vec3(s->getPos(), 0.0f), angle, color * s->getRatioHP(), s->size);
 		}
 	}
 };
