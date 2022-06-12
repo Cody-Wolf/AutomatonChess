@@ -10,9 +10,9 @@ private:
 	glm::vec3 m_scale;
 public:
 	Object(unsigned int id, const glm::vec3& scale) :m_scale(scale), m_model(id) {  }
-	void draw(const glm::vec3& pos, float rot, const glm::vec3& color)
+	void draw(const glm::vec3& pos, float rot, const glm::vec3& color, const glm::vec3& scale = glm::vec3(1.0f))
 	{
-		GlobalRenderManger.addRender(m_model, pos, rot, m_scale, color);
+		GlobalRenderManger.addRender(m_model, pos, rot, m_scale * scale, color);
 	}
 };
 
