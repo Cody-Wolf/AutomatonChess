@@ -11,47 +11,25 @@ class Level
 {
 private:
 
+protected:
+	static std::unordered_map<unsigned int, int> m_key;
+	static bool check(GLFWwindow* window, unsigned int key)
+	{
+		if (glfwGetKey(window, key) == GLFW_PRESS && m_key[key] + 200 < clock())
+		{
+			m_key[key] = clock();
+			return true;
+		}
+		return false;
+	}
 public:
 	Level() = default;
 	virtual void beginLevel() = 0;
-	virtual void tick(float delta) = 0;
+	virtual void tick(GLFWwindow* window, float delta) = 0;
 	virtual void endLevel() = 0;
 };
+std::unordered_map<unsigned int, int> Level::m_key = std::unordered_map<unsigned int, int>();
 
-class DefaultLevel :public Level
-{
-private:
-	float sumTime;
-	WarSystem* sys;
-public:
-	void beginLevel() {
-		sys = new WarSystem(50);
-	}
-	void tick(float delta) {
-#ifdef _DEBUG
-		cout << "===========RoundStart========" << endl;
-		cout << "now nums : " << sys->soldiers.size() << endl;
-		cout << "state now:\n";
-		for (auto x : sys->soldiers)
-			cout
-			<< "-------------------\n"
-			<< "name £º " << x->getName() << endl
-			<< "HP : " << x->getHP() << endl
-			<< "Level : " << x->getLevel() << endl
-			<< "SP : " << x->getSP() << endl
-			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
-#endif
-		sys->buffManager.loop();
-#ifdef _DEBUG
-		cout << "==================BUFF end==============" << endl;
-#endif
-		sys->WarLoop();
-		sys->DrawLoop();
-	}
-	void endLevel() {
-		delete sys;
-	}
-};
 
 
 
@@ -78,7 +56,7 @@ public:
 //};
 
 Level* currentLevel = nullptr;
-Level* nextLevel = new DefaultLevel;
+Level* nextLevel = nullptr;
 //LevelManger levelManger;
 
 //void setNextLevel(const std::string& level)
@@ -109,67 +87,62 @@ bool swapLevel()
 	return false;
 }
 
-
-class aLevel :public Level
+class StartLevel;
+class DefaultLevel :public Level
 {
 private:
 	float sumTime;
+	WarSystem* sys;
 public:
-	void beginLevel()
-	{
-		sumTime = 0;
+	void beginLevel() {
+		sys = new WarSystem(50);
 	}
-	void tick(float delta)
-	{
-		sumTime += delta;
-		float r = cos(sumTime);
-		glClearColor(r, 0, 0, 1.0f);
+	void tick(GLFWwindow* window, float delta) {
+#ifdef _DEBUG
+		cout << "===========RoundStart========" << endl;
+		cout << "now nums : " << sys->soldiers.size() << endl;
+		cout << "state now:\n";
+		for (auto x : sys->soldiers)
+			cout
+			<< "-------------------\n"
+			<< "name £º " << x->getName() << endl
+			<< "HP : " << x->getHP() << endl
+			<< "Level : " << x->getLevel() << endl
+			<< "SP : " << x->getSP() << endl
+			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
+#endif
+		sys->buffManager.loop();
+#ifdef _DEBUG
+		cout << "==================BUFF end==============" << endl;
+#endif
+		sys->WarLoop();
+		sys->DrawLoop();
+		if (check(window, GLFW_KEY_ESCAPE))
+			setNextLevel<StartLevel>();
 	}
-	void endLevel()
-	{
-
+	void endLevel() {
+		delete sys;
 	}
-
 };
-class bLevel :public Level
+
+class StartLevel :public Level
 {
 private:
-	float sumTime;
+	
 public:
-	void beginLevel()
+	void beginLevel() 
 	{
-		sumTime = 0;
+		
 	}
-	void tick(float delta)
+	void tick(GLFWwindow* window, float delta)
 	{
-		sumTime += delta;
-		float g = cos(sumTime);
-		glClearColor(0, g, 0, 1.0f);
+		if (check(window, GLFW_KEY_ENTER))
+			setNextLevel<DefaultLevel>();
+		else if (check(window, GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
-	void endLevel()
-	{
-
-	}
-
-};
-class cLevel :public Level
-{
-private:
-	float sumTime;
-public:
-	void beginLevel()
-	{
-		sumTime = 0;
-	}
-	void tick(float delta)
-	{
-		sumTime += delta;
-		float r = cos(sumTime);
-		glClearColor(0, 0, r, 1.0f);
-	}
-	void endLevel()
+	void endLevel() 
 	{
 
 	}
-
 };

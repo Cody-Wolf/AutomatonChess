@@ -28,7 +28,6 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
-
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -42,16 +41,14 @@ int main()
 	Clock ck;
 	ck.setSpeed(1.0f);
 	GlobalRenderManger.init();
+	nextLevel = new StartLevel;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float delta = ck.getDeltaSeconds();
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		{
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
-		}
 
 		if (!swapLevel())
-			currentLevel->tick(delta);
+			currentLevel->tick(window, delta);
 
 		GlobalRenderManger.Render();
 		
