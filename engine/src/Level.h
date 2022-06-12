@@ -14,7 +14,7 @@ private:
 public:
 	Level() = default;
 	virtual void beginLevel() = 0;
-	virtual void tick(float delta) = 0;
+	virtual void tick(GLFWwindow* window,float delta) = 0;
 	virtual void endLevel() = 0;
 };
 
@@ -27,7 +27,7 @@ public:
 	void beginLevel() {
 		sys = new WarSystem(50);
 	}
-	void tick(float delta) {
+	void tick(GLFWwindow* window,float delta) {
 #ifdef _DEBUG
 		cout << "===========RoundStart========" << endl;
 		cout << "now nums : " << sys->soldiers.size() << endl;
@@ -54,38 +54,8 @@ public:
 };
 
 
-
-//class LevelManger
-//{
-//private:
-//	std::unordered_map<std::string, std::function<Level* ()>> m_Levels;
-//public:
-//	template<class T>
-//	void registerLevel(const std::string& name)
-//	{
-//		m_Levels[name] = []() {return new T(); };
-//	}
-//	Level* getLevel(const std::string& name)
-//	{
-//		auto iter = m_Levels.find(name);
-//		if (iter == m_Levels.end())
-//		{
-//			std::cout << "Level:" << name << "¹Ø¿¨Î´×¢²á" << std::endl;
-//			return nullptr;
-//		}
-//		return iter->second();
-//	}
-//};
-
 Level* currentLevel = nullptr;
-Level* nextLevel = new DefaultLevel;
-//LevelManger levelManger;
-
-//void setNextLevel(const std::string& level)
-//{
-//	nextLevel = levelManger.getLevel(level);
-//}
-
+Level* nextLevel = nullptr;
 template<class T>
 void setNextLevel()
 {
@@ -109,67 +79,32 @@ bool swapLevel()
 	return false;
 }
 
-
-class aLevel :public Level
+class StartLevel :public Level
 {
 private:
-	float sumTime;
+	std::unordered_map<unsigned int, bool> m_key;
+	bool check(GLFWwindow* window, unsigned int key)
+	{
+		if (glfwGetKey(window, key) == GLFW_PRESS && m_key[key] == 0)
+			m_key[key] = 1;
+		else
+			m_key[key] = 0;
+		return m_key[key];
+	}
 public:
 	void beginLevel()
 	{
-		sumTime = 0;
+
 	}
-	void tick(float delta)
+	void tick(GLFWwindow* window, float delta)
 	{
-		sumTime += delta;
-		float r = cos(sumTime);
-		glClearColor(r, 0, 0, 1.0f);
+		if (check(window, GLFW_KEY_ENTER))
+			setNextLevel<DefaultLevel>();
+		else if (check(window, GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
 	void endLevel()
 	{
 
 	}
-
-};
-class bLevel :public Level
-{
-private:
-	float sumTime;
-public:
-	void beginLevel()
-	{
-		sumTime = 0;
-	}
-	void tick(float delta)
-	{
-		sumTime += delta;
-		float g = cos(sumTime);
-		glClearColor(0, g, 0, 1.0f);
-	}
-	void endLevel()
-	{
-
-	}
-
-};
-class cLevel :public Level
-{
-private:
-	float sumTime;
-public:
-	void beginLevel()
-	{
-		sumTime = 0;
-	}
-	void tick(float delta)
-	{
-		sumTime += delta;
-		float r = cos(sumTime);
-		glClearColor(0, 0, r, 1.0f);
-	}
-	void endLevel()
-	{
-
-	}
-
 };
