@@ -28,7 +28,7 @@ static Object makeFiveObject(const glm::vec3& scale = glm::vec3(0.1f))
 {
 	return Object(3, scale);
 }
-static Object makeCubeObject(const glm::vec3& scale = glm::vec3(0.1f))
+static Object makeCubeObject(const glm::vec3& scale = glm::vec3(0.4f))
 {
 	return Object(4, scale);
 }

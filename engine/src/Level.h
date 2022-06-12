@@ -25,7 +25,7 @@ private:
 	WarSystem* sys;
 public:
 	void beginLevel() {
-		sys = new WarSystem(10);
+		sys = new WarSystem(50);
 	}
 	void tick(float delta) {
 #ifdef _DEBUG
@@ -42,6 +42,9 @@ public:
 			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
 #endif
 		sys->buffManager.loop();
+#ifdef _DEBUG
+		cout << "==================BUFF end==============" << endl;
+#endif
 		sys->WarLoop();
 		sys->DrawLoop();
 	}
