@@ -12,7 +12,6 @@ static std::string GetSource(const char* path)
 {
 	std::ifstream file(path);
 	std::ostringstream ss;
-	//std::cout << file.rdbuf() << std::endl;
 	ss << file.rdbuf();
 	return ss.str();
 }
@@ -27,7 +26,6 @@ struct Shader
 		std::cout << path << std::endl;
 #endif
 		std::string source = GetSource(path);
-		//std::cout << source << std::endl;
 		const char* src = source.c_str();
 		glShaderSource(id, 1, &src, NULL);
 		glCompileShader(id);

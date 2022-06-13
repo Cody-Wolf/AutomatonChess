@@ -30,120 +30,6 @@ struct Model
 	glm::vec3 color;
 };
 
-static std::vector<float> position[5]=
-{
-	{
-		-0.5f, 0.5f, 0.0f,
-		-0.5f,-0.5f, 0.0f,
-		 0.5f,-0.5f, 0.0f,
-
-		 0.5f,-0.5f, 0.0f,
-		 0.5f, 0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
-	},
-	{
-		-0.5f, 0.0f, 0.5f,//1
-		 0.5f, 0.0f, 0.5f,//2
-		 0.0f, 1.0f, 0.0f,//3
-
-		 0.5f, 0.0f, 0.5f,//2
-		 0.0f, 0.0f,-0.5f,//4
-		 0.0f, 1.0f, 0.0f,//3
-
-		 0.0f, 0.0f,-0.5f,//4
-		-0.5f, 0.0f, 0.5f,//1
-		 0.0f, 1.0f, 0.0f//3
-
-	},
-	{
-		-0.5f, 0.0f, 0.5f,//1
-		 0.5f, 0.0f, 0.5f,//2
-		 0.0f, 1.0f, 0.0f,//5
-
-		 0.5f, 0.0f, 0.5f,//2
-		 0.5f, 0.0f,-0.5f,//3
-		 0.0f, 1.0f, 0.0f,//5
-
-		 0.5f, 0.0f,-0.5f,//3
-		-0.5f, 0.0f,-0.5f,//4
-		 0.0f, 1.0f, 0.0f,//5
-
-		-0.5f, 0.0f,-0.5f,//4
-		-0.5f, 0.0f, 0.5f,//1
-		 0.0f, 1.0f, 0.0f//5
-	},
-	{
-		-0.4f, 0.0f, 0.5f,//1
-		 0.4f, 0.0f, 0.5f,//2
-		 0.0f, 1.0f, 0.0f,//6
-
-		 0.4f, 0.0f, 0.5f,//2
-		 0.5f, 0.0f, 0.0f,//3
-		 0.0f, 1.0f, 0.0f,//6
-
-		 0.5f, 0.0f, 0.0f,//3
-		 0.0f, 0.0f,-0.5f,//4
-		 0.0f, 1.0f, 0.0f,//6
-
-		 0.0f, 0.0f,-0.5f,//4
-		-0.5f, 0.0f, 0.0f,//5
-		 0.0f, 1.0f, 0.0f,//6
-
-		-0.5f, 0.0f, 0.0f,//5
-		-0.4f, 0.0f, 0.5f,//1
-		 0.0f, 1.0f, 0.0f,//6
-	},
-	{
-		-0.5f, 0.5f, 0.5f,//1
-		-0.5f,-0.5f, 0.5f,//2
-		 0.5f,-0.5f, 0.5f,//3
-
-		 0.5f,-0.5f, 0.5f,//3
-		 0.5f, 0.5f, 0.5f,//4
-		-0.5f, 0.5f, 0.5f,//1
-
-		 0.5f, 0.5f, 0.5f,//4
-		 0.5f,-0.5f, 0.5f,//3
-		 0.5f,-0.5f,-0.5f,//6
-
-		 0.5f,-0.5f,-0.5f,//6
-		 0.5f, 0.5f,-0.5f,//7
-		 0.5f, 0.5f, 0.5f,//4
-
-		 0.5f, 0.5f,-0.5f,//7
-		 0.5f,-0.5f,-0.5f,//6
-		-0.5f,-0.5f,-0.5f,//5
-
-		-0.5f, 0.5f,-0.5f,//8
-		 0.5f, 0.5f,-0.5f,//7
-		-0.5f,-0.5f,-0.5f,//5
-
-		-0.5f, 0.5f,-0.5f,//8
-		-0.5f,-0.5f,-0.5f,//5
-		-0.5f,-0.5f, 0.5f,//2
-
-		-0.5f, 0.5f,-0.5f,//8
-		-0.5f,-0.5f, 0.5f,//2
-		-0.5f, 0.5f, 0.5f,//1
-
-		-0.5f, 0.5f,-0.5f,//8
-		 0.5f, 0.5f, 0.5f,//4
-		 0.5f, 0.5f,-0.5f,//7
-
-		-0.5f, 0.5f,-0.5f,//8
-		-0.5f, 0.5f, 0.5f,//1
-		 0.5f, 0.5f, 0.5f,//4
-
-		-0.5f,-0.5f,-0.5f,//5
-		 0.5f,-0.5f,-0.5f,//6
-		-0.5f,-0.5f, 0.5f,//2
-
-		 0.5f,-0.5f,-0.5f,//6
-		 0.5f,-0.5f, 0.5f,//3
-		-0.5f,-0.5f, 0.5f//2
-	}
-};
-
 class RenderManger
 {
 private:
@@ -190,7 +76,6 @@ public:
 		glm::mat4 lview;
 		{
 			glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 50.0f, 50.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			//glm::mat4 view = glm::lookAt(glm::vec3(50.0f, 30.0f, -20.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			glm::mat4 proj = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 500.0f);
 			lview = proj * view;
 		}
@@ -234,36 +119,10 @@ public:
 				}
 			}
 		}
-		//m_Models.clear();
 		glViewport(0, 0, 1920, 1080);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		/*glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, dpt);
-		{
-			glDisable(GL_DEPTH_TEST);
-			float postion[] = {
-				-1.0f	,-1.0f	,0.0f	,0.0f	,0.0f,
-				1.0f	,-1.0f	,0.0f	,1.0f	,0.0f,
-				-1.0f	,1.0f	,0.0f	,0.0f	,1.0f,
-				1.0f	,-1.0f	,0.0f	,1.0f	,0.0f,
-				-1.0f	,1.0f	,0.0f	,0.0f	,1.0f,
-				1.0f	,1.0f	,0.0f	,1.0f	,1.0f
-			};
-			Program shader("engine/render/shader/DepthVertex.shader", "engine/render/shader/DepthFragment.shader");
-			VertexArray vao;
-			VertexBuffer vbo;
-			VertexBufferLayout layout;
-			layout.Layout<float>(3, 0);
-			layout.Layout<float>(2, 0);
 
-			shader.Setuniform1i("depthMap", 0);
-			vbo.SetData(sizeof(postion), postion, GL_STATIC_DRAW);
-			vao.Bind(vbo);
-			vao.Bind(layout);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glEnable(GL_DEPTH_TEST);
-		}*/
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, dpt);
 		glm::mat4 view, proj;
@@ -295,7 +154,6 @@ public:
 			t_shader->Setuniform1i("tex", 0);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-		//static mModel mode("engine/rely/Pawn.obj");
 		m_shader->Setuniform3f("cpos", 50.0f, 30.0f, -20.0f);
 		m_shader->Setuniform3f("ldir", -1.0f, -1.0f, 0.0f);
 		m_shader->Setuniform4m("lview", glm::value_ptr(lview));
@@ -311,21 +169,12 @@ public:
 			modeli = glm::translate(modeli, glm::vec3(x, y, z));
 			modeli = glm::scale(modeli, model.scale);
 			modeli = glm::rotate(modeli, model.rot, glm::vec3(0.0f, 1.0f, 0.0f));
-			/*VertexArray vao;
-			VertexBuffer vbo;
-			VertexBufferLayout layout;
-			layout.Layout<float>(3, 0);
-			vbo.SetData(position[model.id].size() * sizeof(float), position[model.id].data(), GL_STATIC_DRAW);
-			vao.Bind(vbo);
-			vao.Bind(layout);*/
+
 			m_shader->Setuniform3f("color", model.color.r, model.color.g, model.color.b);
 			m_shader->Setuniform4m("model", glm::value_ptr(modeli));
 			m_shader->Setuniform4m("view", glm::value_ptr(view));
 			m_shader->Setuniform4m("proj", glm::value_ptr(proj));
-			m_md[model.id - 1].Draw(*m_shader);
-			//mode.Draw(shader);
-			//glDrawArrays(GL_TRIANGLES, 0, position[model.id].size());
-			
+			m_md[model.id - 1].Draw(*m_shader);		
 
 		}
 		glDeleteTextures(1, &dpt);

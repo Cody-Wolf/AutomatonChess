@@ -19,8 +19,11 @@ int main()
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	//GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", glfwGetPrimaryMonitor(), nullptr);
+#ifdef _DEBUG
 	GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", nullptr, nullptr);
+#else
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "AutomatonChess", glfwGetPrimaryMonitor(), nullptr);
+#endif
 
 	if (window == nullptr)
 	{
@@ -55,7 +58,6 @@ int main()
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
-		std::cout << "FPS:" << 1.0f / delta << std::endl;
 	}
 	
 	glfwTerminate();

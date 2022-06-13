@@ -31,38 +31,9 @@ public:
 std::unordered_map<unsigned int, int> Level::m_key = std::unordered_map<unsigned int, int>();
 
 
-
-
-//class LevelManger
-//{
-//private:
-//	std::unordered_map<std::string, std::function<Level* ()>> m_Levels;
-//public:
-//	template<class T>
-//	void registerLevel(const std::string& name)
-//	{
-//		m_Levels[name] = []() {return new T(); };
-//	}
-//	Level* getLevel(const std::string& name)
-//	{
-//		auto iter = m_Levels.find(name);
-//		if (iter == m_Levels.end())
-//		{
-//			std::cout << "Level:" << name << "¹Ø¿¨Î´×¢²á" << std::endl;
-//			return nullptr;
-//		}
-//		return iter->second();
-//	}
-//};
-
 Level* currentLevel = nullptr;
 Level* nextLevel = nullptr;
-//LevelManger levelManger;
 
-//void setNextLevel(const std::string& level)
-//{
-//	nextLevel = levelManger.getLevel(level);
-//}
 
 template<class T>
 void setNextLevel()
