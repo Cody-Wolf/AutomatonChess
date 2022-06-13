@@ -300,7 +300,7 @@ public:
 		MP = min(maxMP, MP + maxMP * 0.2);
 	}
 
-
+	
 	virtual void update() {
 		if (exp < 40) return;
 		level++, exp -= 40, roundTime *= 0.9;
@@ -435,6 +435,14 @@ public:
 			float angle = atan2(dy, -dx);
 			s->ob.draw(glm::vec3(s->getPos(),s->getHight()), angle, color * s->getRatioHP(), s->size);
 		}
+	}
+
+	bool isEnd() {
+		if (soldiers.empty()) return true;
+		int team = soldiers[0]->getTeam();
+		for (auto s : soldiers)
+			if (s->getTeam() != team) return false;
+		return true;
 	}
 };
 

@@ -121,6 +121,7 @@ public:
 			setNextLevel<StartLevel>();
 		if (check(window, GLFW_KEY_SPACE))
 			isRunning ^= 1;
+		if (sys->isEnd()) setNextLevel<StartLevel>();
 	}
 	void endLevel() {
 		delete sys;
