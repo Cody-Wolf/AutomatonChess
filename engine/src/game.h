@@ -354,10 +354,17 @@ public:
 			lastRest = clock();
 			rest();
 		}
-
+		
 		selectTarget(soldiers);
 		if (target) {
-			if (glm::distance(target->getPos(), pos) > range)
+			if (target == this)
+			{
+				if (team == 1)
+					dir = glm::vec2(1.0f, 0.0f);
+				else
+					dir = glm::vec2(-1.0f, 0.0f);
+			}
+			else if (glm::distance(target->getPos(), pos) > range)
 				dir = glm::normalize(target->getPos() - pos);
 			else
 				dir = glm::normalize(pos - target->getPos());
