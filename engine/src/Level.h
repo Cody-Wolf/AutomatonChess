@@ -92,10 +92,11 @@ class DefaultLevel :public Level
 {
 private:
 	float sumTime;
+	bool isRunning;
 	WarSystem* sys;
 public:
 	void beginLevel() {
-		sys = new WarSystem(50);
+		sys = new WarSystem(50), isRunning = 1;
 	}
 	void tick(GLFWwindow* window, float delta) {
 #ifdef _DEBUG
@@ -111,14 +112,15 @@ public:
 			<< "SP : " << x->getSP() << endl
 			<< "pos : " << x->getPos().x << ' ' << x->getPos().y << endl;
 #endif
-		sys->buffManager.loop();
-#ifdef _DEBUG
-		cout << "==================BUFF end==============" << endl;
-#endif
-		sys->WarLoop();
+		if (isRunning) {
+			sys->buffManager.loop();
+			sys->WarLoop();
+		}
 		sys->DrawLoop();
 		if (check(window, GLFW_KEY_ESCAPE))
 			setNextLevel<StartLevel>();
+		if (check(window, GLFW_KEY_SPACE))
+			isRunning ^= 1;
 	}
 	void endLevel() {
 		delete sys;

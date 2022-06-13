@@ -38,16 +38,16 @@ protected:
 	int team, cost, drugNum, level, exp;
 	unordered_set<BuffState*> buffs;
 	Soldier* target;
-	glm::vec2 dir;
-	glm::vec2 pos;
+	glm::vec2 dir, pos;
 	string name;
+	float hight, speed;
 public:
 	Object ob;
 	glm::vec3 size;
 
 	Soldier(int _team, int id, glm::vec2 _pos) :
 		maxHP(100), HP(100), maxSP(100), SP(100), size(glm::vec3(1, 1, 1)),
-		exp(0), level(1), pos(_pos), dir(), target(),
+		exp(0), level(1), pos(_pos), dir(), target(), hight(0), speed(SPEED),
 		drugNum(2), team(_team), roundTime(ROUND_TIME), cost(1), lastRound(clock()), lastRest(clock()),
 		damage(20), range(FIGHT_RANGE), name("Soldier-" + to_string(id) + "-" + to_string(team)), ob(makeThreeObject()) {}
 
@@ -69,7 +69,7 @@ public:
 #ifdef _DEBUG
 		cout << "move" << endl;
 #endif
-		glm::vec2 tpos = pos + dir * SPEED;
+		glm::vec2 tpos = pos + dir * speed;
 		if (0 <= tpos.x && tpos.x <= BATTLE_RANGE && 0 <= tpos.y && tpos.y <= BATTLE_RANGE)
 			pos = tpos;
 	}
@@ -172,6 +172,7 @@ public:
 	void insertBuff(BuffState* buff) { buffs.insert(buff); }
 	void setRoundTime(double x) { roundTime *= x; }
 	bool hasBuff() { return buffs.size(); }
+	float getHight() { return hight; }
 };
 
 class Buff : public BuffState {
@@ -233,7 +234,7 @@ class Magic : public Soldier {
 public:
 	int frd;
 	Magic(double _damage, int team, glm::vec2 _pos, Soldier* _target) : Soldier(0, 0, _pos), frd(team) {
-		target = _target, range = 10, name = "Magic";
+		target = _target, range = 10, name = "Magic", hight = 1.5, speed = SPEED * 2;
 		roundTime = 1, damage = _damage, ob = makeCubeObject();
 	}
 	void makeDecision(vector<Soldier*>& soldiers) {
@@ -257,7 +258,7 @@ public:
 	Wizard(int _team, int id, glm::vec2 _pos) :
 		Soldier(_team, id, _pos), maxMP(100), MP(100) {
 		name = "Wizard"; ob = makeFourObject(), range = FIGHT_RANGE * 6;
-		damage = 60;
+		damage = 60, speed = SPEED / 2;
 	}
 
 	virtual void makeDecision(vector<Soldier*>& soldiers) {
@@ -286,8 +287,8 @@ public:
 			soldiers.push_back(new Magic(damage, team, pos + dir, target));
 			update();
 		}
-		else if (target && SP >= 5)
-			move(), SP -= 5;
+		else if (target && SP >= 1)
+			move(), SP -= 1;
 	}
 
 	virtual void rest() {
@@ -432,7 +433,7 @@ public:
 			float dx = s->getDir().x;
 			float dy = s->getDir().y;
 			float angle = atan2(dy, -dx);
-			s->ob.draw(glm::vec3(s->getPos(), 0.0f), angle, color * s->getRatioHP(), s->size);
+			s->ob.draw(glm::vec3(s->getPos(),s->getHight()), angle, color * s->getRatioHP(), s->size);
 		}
 	}
 };
