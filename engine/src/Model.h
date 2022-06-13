@@ -135,7 +135,6 @@ private:
 			for (int j = 0; j < face.mNumIndices; ++j)
 				indices.push_back(face.mIndices[j]);
 		}
-		std::cout << indices.size() << "|||||||||||||||||||||||||||||||||\n";
 		return { vertices, indices, textures };
 	}
 	std::vector<mTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
